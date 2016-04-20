@@ -31,7 +31,7 @@
       // The provided key works for this sample only when run from
       // https://google-api-javascript-client.googlecode.com/hg/samples/authSample.html
       // To use in your own application, replace this API key with your own.
-      var apiKey = '';
+      var apiKey = 'AIzaSyBYWVrkrCDrCGEqe-QQi3reE9Spmp3yH8w';
 
       // Use a button to handle authentication the first time.
       function handleClientLoad() {
@@ -43,10 +43,10 @@
       function makeApiCall() {
         gapi.client.load('plus', 'v1', function() {
           var request = gapi.client.plus.people.get({
-            'userId': ''
-            // For instance: 
-            // 'userId': '+GregorioRobles'
+            'userId': '108086881826934773478'
           });
+          
+
           request.execute(function(resp) {
             var heading = document.createElement('h4');
             var image = document.createElement('img');
@@ -57,10 +57,32 @@
             document.getElementById('content').appendChild(heading);
           });
         });
+
+        gapi.client.load('plus', 'v1', function() {
+          var activity = gapi.client.plus.activities.list({
+            'userId': '108086881826934773478', 
+            'collection' : 'public'
+          });
+
+          activity.execute(function(resp) {
+            var numItems = resp.items.length;
+            var lista = document.createElement('ul');
+            console.log(numItems);
+            document.getElementById('cont').appendChild(lista);
+            for (var i = 0; i < numItems; i++) {
+              var data = document.createElement('li');
+              data.appendChild(document.createTextNode("title: " + resp.items[i].title + ", url: "+ resp.items[i].url));
+              document.getElementById('cont').appendChild(data);
+              console.log("title: " + resp.items[i].title + ", url: "+ resp.items[i].url);
+            };
+          });
+        });
+
       }
+
     </script>
     <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
     <div id="content"></div>
-    <p>Retrieves your profile name (and picture) using the Google Plus API.</p>
+    <div id="cont"></div>
   </body>
 </html>
